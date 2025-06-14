@@ -30,4 +30,11 @@ describe('ObsidianPluginI18n', () => {
     expect(i18n.t('greeting.hello')).to.eq('Hello');
     expect(i18n.t('greeting.welcome', { name: 'dragonish' })).to.eq('Welcome, dragonish!');
   });
+
+  it('should translate a key that is missing a localized property', () => {
+    const i18n = new ObsidianPluginI18n(messages, 'ja');
+
+    expect(i18n.t('greeting.hello')).to.eq('Hello');
+    expect(i18n.t('greeting.welcome', { name: 'dragonish' })).to.eq('Welcome, dragonish!');
+  });
 });

@@ -104,6 +104,12 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
   t(key: NestedKeyOf<Schema>, params?: Record<string, string>): string {
     const keys = key.split('.');
     let message: string | NestedStringObject | undefined = this.messages[this.locale];
+
+    if (typeof message === 'undefined') {
+      //? Fallback to en.
+      message = this.messages['en'];
+    }
+
     for (const k of keys) {
       if (typeof message === 'object' && message) {
         message = message[k];
@@ -112,7 +118,7 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
       }
     }
 
-    if (typeof message == 'undefined' || typeof message == 'object') {
+    if (typeof message === 'undefined' || typeof message === 'object') {
       return key;
     }
 
