@@ -70,8 +70,10 @@ export type LanguageCodeType =
   | 'zh'
   | 'zh-TW';
 
+type MessagesWithRequiredEn<Schema> = { en: Schema } & Partial<Record<Exclude<LanguageCodeType, 'en'>, Schema>>;
+
 export class ObsidianPluginI18n<Schema extends NestedStringObject> {
-  private messages: Partial<Record<LanguageCodeType, Schema>>;
+  private messages: MessagesWithRequiredEn<Schema>;
   private locale: LanguageCodeType;
 
   /**
@@ -80,7 +82,7 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
    * @param messages A record of language codes and their corresponding message objects.
    * @param locale The language code. If not provided, the current language will be used.
    */
-  constructor(messages: Partial<Record<LanguageCodeType, Schema>>, locale?: LanguageCodeType) {
+  constructor(messages: MessagesWithRequiredEn<Schema>, locale?: LanguageCodeType) {
     this.messages = messages;
     this.locale = locale ?? (getLanguage() as LanguageCodeType);
   }
