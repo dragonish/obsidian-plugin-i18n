@@ -118,7 +118,7 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
    * @param params Optional parameters to replace placeholders in the message.
    * @returns The translated message.
    */
-  t(key: NestedKeyOf<Schema>, params?: Record<string, string>): string {
+  t(key: NestedKeyOf<Schema>, params?: Record<string, unknown>): string {
     const keys = key.split('.');
     let message: string | NestedStringObject | undefined = this.currentMessage;
 
@@ -135,8 +135,8 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
     }
 
     return message.replace(/\{(\w+)\}/g, (_, p1) => {
-      if (params) {
-        return params[p1] ?? `{${p1}}`;
+      if (params && params[p1] != undefined) {
+        return String(params[p1]);
       }
       return `{${p1}}`;
     });

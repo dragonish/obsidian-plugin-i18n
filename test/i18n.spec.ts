@@ -37,4 +37,14 @@ describe('ObsidianPluginI18n', () => {
     expect(i18n.t('greeting.hello')).to.eq('Hello');
     expect(i18n.t('greeting.welcome', { name: 'dragonish' })).to.eq('Welcome, dragonish!');
   });
+
+  it('should translate a key without params parmameter', () => {
+    const i18n = new ObsidianPluginI18n(messages, 'en');
+
+    expect(i18n.t('greeting.welcome')).to.eq('Welcome, {name}!');
+    expect(i18n.t('greeting.welcome', {})).to.eq('Welcome, {name}!');
+    expect(i18n.t('greeting.welcome', { name: null })).to.eq('Welcome, {name}!');
+    expect(i18n.t('greeting.welcome', { name: 0 })).to.eq('Welcome, 0!');
+    expect(i18n.t('greeting.welcome', { name: false })).to.eq('Welcome, false!');
+  });
 });
