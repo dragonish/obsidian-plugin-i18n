@@ -75,6 +75,7 @@ type MessagesWithRequiredEn<Schema> = { en: Schema } & Partial<Record<Exclude<La
 export class ObsidianPluginI18n<Schema extends NestedStringObject> {
   private messages: MessagesWithRequiredEn<Schema>;
   private locale: LanguageCodeType;
+  private currentMessage: Schema;
 
   /**
    * Constructor for ObsidianPluginI18n.
@@ -85,6 +86,13 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
   constructor(messages: MessagesWithRequiredEn<Schema>, locale?: LanguageCodeType) {
     this.messages = messages;
     this.locale = locale ?? (getLanguage() as LanguageCodeType);
+    const currentMessage = this.messages[this.locale];
+    if (typeof currentMessage === 'undefined') {
+      //? Fallback to en.
+      this.currentMessage = this.messages['en'];
+    } else {
+      this.currentMessage = currentMessage;
+    }
   }
 
   /**
@@ -94,6 +102,13 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
    */
   setLocale(locale?: LanguageCodeType): void {
     this.locale = locale ?? (getLanguage() as LanguageCodeType);
+    const currentMessage = this.messages[this.locale];
+    if (typeof currentMessage === 'undefined') {
+      //? Fallback to en.
+      this.currentMessage = this.messages['en'];
+    } else {
+      this.currentMessage = currentMessage;
+    }
   }
 
   /**
@@ -105,12 +120,7 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
    */
   t(key: NestedKeyOf<Schema>, params?: Record<string, string>): string {
     const keys = key.split('.');
-    let message: string | NestedStringObject | undefined = this.messages[this.locale];
-
-    if (typeof message === 'undefined') {
-      //? Fallback to en.
-      message = this.messages['en'];
-    }
+    let message: string | NestedStringObject | undefined = this.currentMessage;
 
     for (const k of keys) {
       if (typeof message === 'object' && message) {
