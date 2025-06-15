@@ -47,4 +47,13 @@ describe('ObsidianPluginI18n', () => {
     expect(i18n.t('greeting.welcome', { name: 0 })).to.eq('Welcome, 0!');
     expect(i18n.t('greeting.welcome', { name: false })).to.eq('Welcome, false!');
   });
+
+  it('should translate a key with the placeholder', () => {
+    const messages = {
+      en: { greeting: { welcome: 'Welcome, {placeholder}!' } },
+    };
+    const i18n = new ObsidianPluginI18n(messages, 'en');
+
+    expect(i18n.getPlaceholderTuple('greeting.welcome')).to.deep.eq(['Welcome, ', '!']);
+  });
 });

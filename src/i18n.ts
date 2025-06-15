@@ -141,4 +141,23 @@ export class ObsidianPluginI18n<Schema extends NestedStringObject> {
       return `{${p1}}`;
     });
   }
+
+  /**
+   * Gets the translation tuple based on the split using the placeholder.
+   *
+   * @param key The key to translate. It can be a dot-separated path to.
+   * @param placeholder the placeholder to split the text. Default is '{placeholder}'.
+   * @returns The translation tuple.
+   */
+  getPlaceholderTuple(key: NestedKeyOf<Schema>, placeholder = '{placeholder}'): [string, string] {
+    const text = this.t(key);
+    const parts = text.split(placeholder);
+    if (parts.length === 1) {
+      return [parts[0], ''];
+    } else if (parts.length >= 2) {
+      return [parts[0], parts[1]];
+    }
+
+    return ['', ''];
+  }
 }
